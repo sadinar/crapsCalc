@@ -24,21 +24,21 @@ func main() {
 	//}
 	//fmt.Println("]")
 	mean, stdDeviation := findMeanAndStdDeviation(results)
-	median := findMedian(results)
 	fmt.Printf(
-		"Median: %.6f\nMean: %.6f\nStdDeviation: %.6f\n",
-		median,
+		"Median: %.6f\nMean: %.6f\nStdDeviation: %.6f\nTotal: %d\n",
+		findMedian(results),
 		mean,
 		stdDeviation,
+		sumResults(results),
 	)
 }
 
 func playAtTable() int {
-	tbl := setupRegularComePass()
+	//tbl := setupRegularComePass()
 	//tbl := setupCraplessComePass()
 	//tbl := setupCraplessFarExtremes()
 	//tbl := setupCraplessExtremes()
-	//tbl := setupLeastExtremes()
+	tbl := setupLeastExtremes()
 
 	for {
 		if tbl.LastRoundEndedOnSeven() {
@@ -48,6 +48,15 @@ func playAtTable() int {
 	}
 
 	return tbl.GetPlayerBanks()[0]
+}
+
+func sumResults(results []int) int {
+	sum := 0
+	for _, result := range results {
+		sum += result
+	}
+
+	return sum
 }
 
 func findMeanAndStdDeviation(data []int) (float64, float64) {
