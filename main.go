@@ -35,10 +35,11 @@ func main() {
 
 func playAtTable() int {
 	//tbl := setupRegularComePass()
-	//tbl := setupCraplessComePass()
+	tbl := setupCraplessComePass()
 	//tbl := setupCraplessFarExtremes()
 	//tbl := setupCraplessExtremes()
-	tbl := setupLeastExtremes()
+	//tbl := setupLeastExtremes()
+	//tbl := setupBuyAll()
 
 	for {
 		if tbl.LastRoundEndedOnSeven() {
@@ -124,6 +125,15 @@ func setupLeastExtremes() *table.Table {
 		dice.Dice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, true), 0),
+		},
+	)
+}
+
+func setupBuyAll() *table.Table {
+	return table.NewCraplessTable(
+		dice.Dice{},
+		[]*player.Gambler{
+			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
 		},
 	)
 }
