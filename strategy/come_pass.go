@@ -1,11 +1,15 @@
 package strategy
 
 type ComePassStrategy struct {
-	passLineAmount int
+	passLineAmount     int
+	maxOddsMultipliers map[int]int
 }
 
-func NewComePassStrategy(passLineAmount int) *ComePassStrategy {
-	return &ComePassStrategy{passLineAmount: passLineAmount}
+func NewComePassStrategy(passLineAmount int, multipliers map[int]int) *ComePassStrategy {
+	return &ComePassStrategy{
+		passLineAmount:     passLineAmount,
+		maxOddsMultipliers: multipliers,
+	}
 }
 
 func (s *ComePassStrategy) GetPassLineAmount() int {
@@ -17,23 +21,23 @@ func (s *ComePassStrategy) GetOddsAmount(point int) int {
 	case 2:
 		fallthrough
 	case 12:
-		return s.passLineAmount
+		return s.passLineAmount * s.maxOddsMultipliers[12]
 	case 3:
 		fallthrough
 	case 11:
-		return 2 * s.passLineAmount
+		return s.passLineAmount * s.maxOddsMultipliers[11]
 	case 4:
 		fallthrough
 	case 10:
-		return 3 * s.passLineAmount
+		return s.passLineAmount * s.maxOddsMultipliers[10]
 	case 5:
 		fallthrough
 	case 9:
-		return 4 * s.passLineAmount
+		return s.passLineAmount * s.maxOddsMultipliers[9]
 	case 6:
 		fallthrough
 	case 8:
-		return 5 * s.passLineAmount
+		return s.passLineAmount * s.maxOddsMultipliers[8]
 	default:
 		panic("invalid point")
 	}

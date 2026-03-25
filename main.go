@@ -35,7 +35,9 @@ func main() {
 
 func playAtTable() int {
 	//tbl := setupRegularComePass()
-	tbl := setupCraplessComePass()
+	//tbl := setupHorseshoeDigitalComePass()
+	//tbl := setupCraplessComePass()
+	tbl := setupStratosphereComePass()
 	//tbl := setupCraplessFarExtremes()
 	//tbl := setupCraplessExtremes()
 	//tbl := setupLeastExtremes()
@@ -88,7 +90,7 @@ func setupRegularComePass() *table.Table {
 	return table.NewRegularTable(
 		dice.Dice{},
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
 		},
 	)
 }
@@ -97,7 +99,25 @@ func setupCraplessComePass() *table.Table {
 	return table.NewCraplessTable(
 		dice.Dice{},
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
+		},
+	)
+}
+
+func setupStratosphereComePass() *table.Table {
+	return table.NewCraplessTable(
+		dice.Dice{},
+		[]*player.Gambler{
+			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get100xMultipliers()), 0),
+		},
+	)
+}
+
+func setupHorseshoeDigitalComePass() *table.Table {
+	return table.NewRegularTable(
+		dice.Dice{},
+		[]*player.Gambler{
+			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get2xMultipliers()), 0),
 		},
 	)
 }
