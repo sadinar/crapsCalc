@@ -9,7 +9,7 @@ import (
 func TestRoll(t *testing.T) {
 	values := make(map[int]int)
 	for x := 0; x < 10000; x++ {
-		value := Dice{}.Roll()
+		value := SeededDice{}.Roll()
 		values[value]++
 	}
 

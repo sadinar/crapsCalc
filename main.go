@@ -13,7 +13,7 @@ import (
 
 func main() {
 	results := make([]int, 0)
-	for i := 0; i < 1000000; i++ {
+	for i := 0; i < 100000000; i++ {
 		result := playAtTable()
 		results = append(results, result)
 	}
@@ -88,7 +88,7 @@ func findMedian(data []int) float64 {
 
 func setupRegularComePass() *table.Table {
 	return table.NewRegularTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
 		},
@@ -97,7 +97,7 @@ func setupRegularComePass() *table.Table {
 
 func setupCraplessComePass() *table.Table {
 	return table.NewCraplessTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
 		},
@@ -106,7 +106,7 @@ func setupCraplessComePass() *table.Table {
 
 func setupStratosphereComePass() *table.Table {
 	return table.NewCraplessTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get100xMultipliers()), 0),
 		},
@@ -115,7 +115,7 @@ func setupStratosphereComePass() *table.Table {
 
 func setupHorseshoeDigitalComePass() *table.Table {
 	return table.NewRegularTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get2xMultipliers()), 0),
 		},
@@ -124,7 +124,7 @@ func setupHorseshoeDigitalComePass() *table.Table {
 
 func setupCraplessFarExtremes() *table.Table {
 	return table.NewCraplessTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, false, false), 0),
 		},
@@ -133,7 +133,7 @@ func setupCraplessFarExtremes() *table.Table {
 
 func setupCraplessExtremes() *table.Table {
 	return table.NewCraplessTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, false), 0),
 		},
@@ -142,7 +142,7 @@ func setupCraplessExtremes() *table.Table {
 
 func setupLeastExtremes() *table.Table {
 	return table.NewCraplessTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, true), 0),
 		},
@@ -151,7 +151,7 @@ func setupLeastExtremes() *table.Table {
 
 func setupBuyAll() *table.Table {
 	return table.NewCraplessTable(
-		dice.Dice{},
+		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
 		},
