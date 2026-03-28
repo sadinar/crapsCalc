@@ -1,10 +1,7 @@
 package main
 
 import (
-	"crapsSimulator/dice"
-	"crapsSimulator/player"
-	"crapsSimulator/strategy"
-	"crapsSimulator/table"
+	"crapsSimulator/runtime"
 	"fmt"
 	"slices"
 
@@ -12,17 +9,16 @@ import (
 )
 
 func main() {
-	results := make([]int, 0)
-	for i := 0; i < 100000000; i++ {
-		result := playAtTable()
-		results = append(results, result)
-	}
+	numRuns := 10000000
+	workerCount := 20
+	results := make([]int, numRuns)
 
-	//fmt.Print("[")
-	//for _, result := range results {
-	//	fmt.Printf(",%d", result)
-	//}
-	//fmt.Println("]")
+	mgr := runtime.NewManager(numRuns, workerCount)
+	mgr.SimulateGames(results)
+	printStats(results)
+}
+
+func printStats(results []int) {
 	mean, stdDeviation := findMeanAndStdDeviation(results)
 	fmt.Printf(
 		"Median: %.6f\nMean: %.6f\nStdDeviation: %.6f\nTotal: %d\n",
@@ -31,26 +27,6 @@ func main() {
 		stdDeviation,
 		sumResults(results),
 	)
-}
-
-func playAtTable() int {
-	//tbl := setupRegularComePass()
-	//tbl := setupHorseshoeDigitalComePass()
-	//tbl := setupCraplessComePass()
-	tbl := setupStratosphereComePass()
-	//tbl := setupCraplessFarExtremes()
-	//tbl := setupCraplessExtremes()
-	//tbl := setupLeastExtremes()
-	//tbl := setupBuyAll()
-
-	for {
-		if tbl.LastRoundEndedOnSeven() {
-			break
-		}
-		tbl.Shoot()
-	}
-
-	return tbl.GetPlayerBanks()[0]
 }
 
 func sumResults(results []int) int {
@@ -84,76 +60,4 @@ func findMedian(data []int) float64 {
 	lastMedian := data[lastIndex]
 
 	return (float64(firstMedian) + float64(lastMedian)) / float64(2)
-}
-
-func setupRegularComePass() *table.Table {
-	return table.NewRegularTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
-		},
-	)
-}
-
-func setupCraplessComePass() *table.Table {
-	return table.NewCraplessTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
-		},
-	)
-}
-
-func setupStratosphereComePass() *table.Table {
-	return table.NewCraplessTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get100xMultipliers()), 0),
-		},
-	)
-}
-
-func setupHorseshoeDigitalComePass() *table.Table {
-	return table.NewRegularTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get2xMultipliers()), 0),
-		},
-	)
-}
-
-func setupCraplessFarExtremes() *table.Table {
-	return table.NewCraplessTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, false, false), 0),
-		},
-	)
-}
-
-func setupCraplessExtremes() *table.Table {
-	return table.NewCraplessTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, false), 0),
-		},
-	)
-}
-
-func setupLeastExtremes() *table.Table {
-	return table.NewCraplessTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, true), 0),
-		},
-	)
-}
-
-func setupBuyAll() *table.Table {
-	return table.NewCraplessTable(
-		dice.SeededDice{},
-		[]*player.Gambler{
-			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
-		},
-	)
 }
