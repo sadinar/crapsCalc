@@ -315,7 +315,7 @@ func TestComeLineLoss(t *testing.T) {
 	}
 
 	tbl.Shoot()
-	assert.Equal(t, 410, tbl.gamblers[0].GetBank()) // todo something is wrong here
+	assert.Equal(t, 410, tbl.gamblers[0].GetBank())
 	tbl.Shoot()
 	assert.Equal(t, 395, tbl.gamblers[0].GetBank())
 	tbl.Shoot()
