@@ -8,6 +8,16 @@ import (
 	"sync"
 )
 
+const RegularComePass = "RegularComePass"
+const HorseshoeDigitalComePass = "HorseshoeDigitalComePass"
+const CraplessComePass = "CraplessComePass"
+const StratosphereComePass = "StratosphereComePass"
+const CraplessFarExtremes = "CraplessFarExtremes"
+const CraplessExtremes = "CraplessExtremes"
+const CraplessLeastExtremes = "LeastExtremes"
+const CraplessBuyAll = "BuyAll"
+const RegularBuyAll = "RegularBuyAll"
+
 type GameRunner struct {
 	wg            *sync.WaitGroup
 	inputChannel  chan int
@@ -18,19 +28,34 @@ func (gr *GameRunner) Start() {
 	defer gr.wg.Done()
 
 	for range gr.inputChannel {
-		gr.playAtTable(gr.outputChannel)
+		gr.playAtTable(RegularComePass, gr.outputChannel)
 	}
 }
 
-func (gr *GameRunner) playAtTable(resultChannel chan int) {
-	tbl := gr.setupRegularComePass()
-	//tbl := gr.setupHorseshoeDigitalComePass()
-	//tbl := gr.setupCraplessComePass()
-	//tbl := gr.setupStratosphereComePass()
-	//tbl := gr.setupCraplessFarExtremes()
-	//tbl := gr.setupCraplessExtremes()
-	//tbl := gr.setupLeastExtremes()
-	//tbl := gr.setupBuyAll()
+func (gr *GameRunner) playAtTable(tableType string, resultChannel chan int) {
+	var tbl *table.Table
+	switch tableType {
+	case RegularComePass:
+		tbl = gr.setupRegularComePass()
+	case HorseshoeDigitalComePass:
+		tbl = gr.setupHorseshoeDigitalComePass()
+	case CraplessComePass:
+		tbl = gr.setupCraplessComePass()
+	case StratosphereComePass:
+		tbl = gr.setupStratosphereComePass()
+	case CraplessFarExtremes:
+		tbl = gr.setupCraplessFarExtremes()
+	case CraplessExtremes:
+		tbl = gr.setupCraplessExtremes()
+	case CraplessLeastExtremes:
+		tbl = gr.setupCraplessLeastExtremes()
+	case CraplessBuyAll:
+		tbl = gr.setupCraplessBuyAll()
+	case RegularBuyAll:
+		tbl = gr.setupRegularBuyAll()
+	default:
+		panic("Unrecognized table type")
+	}
 
 	for {
 		if tbl.LastRoundEndedOnSeven() {
@@ -96,7 +121,7 @@ func (gr *GameRunner) setupCraplessExtremes() *table.Table {
 	)
 }
 
-func (gr *GameRunner) setupLeastExtremes() *table.Table {
+func (gr *GameRunner) setupCraplessLeastExtremes() *table.Table {
 	return table.NewCraplessTable(
 		dice.SeededDice{},
 		[]*player.Gambler{
@@ -105,8 +130,17 @@ func (gr *GameRunner) setupLeastExtremes() *table.Table {
 	)
 }
 
-func (gr *GameRunner) setupBuyAll() *table.Table {
+func (gr *GameRunner) setupCraplessBuyAll() *table.Table {
 	return table.NewCraplessTable(
+		dice.SeededDice{},
+		[]*player.Gambler{
+			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
+		},
+	)
+}
+
+func (gr *GameRunner) setupRegularBuyAll() *table.Table {
+	return table.NewRegularTable(
 		dice.SeededDice{},
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),

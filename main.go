@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	numRuns := 10000000
+	numRuns := 100000000
 	workerCount := 20
 	results := make([]int, numRuns)
 
