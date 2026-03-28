@@ -2,18 +2,33 @@ package dice
 
 import (
 	cryptorand "crypto/rand"
+	"hash/maphash"
 	"math/big"
-	stdrand "math/rand"
+	"math/rand/v2"
+	"strconv"
+	"time"
 )
 
 type RollGenerator interface {
 	Roll() int
 }
 
-type SeededDice struct{}
+type SeededDice struct {
+	randGenerator *rand.Rand
+}
 
-func (sd SeededDice) Roll() int {
-	return stdrand.Intn(6) + 1 + stdrand.Intn(6) + 1
+func NewSeededDice() *SeededDice {
+	var h maphash.Hash
+	_, _ = h.WriteString(strconv.FormatInt(time.Now().UnixNano(), 10))
+	seed := h.Sum64()
+
+	return &SeededDice{
+		randGenerator: rand.New(rand.NewPCG(seed, (seed<<1)|1)),
+	}
+}
+
+func (sd *SeededDice) Roll() int {
+	return sd.randGenerator.IntN(6) + 1 + sd.randGenerator.IntN(6) + 1
 }
 
 type RandomDice struct{}

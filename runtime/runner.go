@@ -69,7 +69,7 @@ func (gr *GameRunner) playAtTable(tableType string, resultChannel chan int) {
 
 func (gr *GameRunner) setupRegularComePass() *table.Table {
 	return table.NewRegularTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
 		},
@@ -78,7 +78,7 @@ func (gr *GameRunner) setupRegularComePass() *table.Table {
 
 func (gr *GameRunner) setupCraplessComePass() *table.Table {
 	return table.NewCraplessTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
 		},
@@ -87,7 +87,7 @@ func (gr *GameRunner) setupCraplessComePass() *table.Table {
 
 func (gr *GameRunner) setupStratosphereComePass() *table.Table {
 	return table.NewCraplessTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get100xMultipliers()), 0),
 		},
@@ -96,7 +96,7 @@ func (gr *GameRunner) setupStratosphereComePass() *table.Table {
 
 func (gr *GameRunner) setupHorseshoeDigitalComePass() *table.Table {
 	return table.NewRegularTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get2xMultipliers()), 0),
 		},
@@ -105,7 +105,7 @@ func (gr *GameRunner) setupHorseshoeDigitalComePass() *table.Table {
 
 func (gr *GameRunner) setupCraplessFarExtremes() *table.Table {
 	return table.NewCraplessTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, false, false), 0),
 		},
@@ -114,7 +114,7 @@ func (gr *GameRunner) setupCraplessFarExtremes() *table.Table {
 
 func (gr *GameRunner) setupCraplessExtremes() *table.Table {
 	return table.NewCraplessTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, false), 0),
 		},
@@ -123,7 +123,7 @@ func (gr *GameRunner) setupCraplessExtremes() *table.Table {
 
 func (gr *GameRunner) setupCraplessLeastExtremes() *table.Table {
 	return table.NewCraplessTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, true), 0),
 		},
@@ -132,7 +132,7 @@ func (gr *GameRunner) setupCraplessLeastExtremes() *table.Table {
 
 func (gr *GameRunner) setupCraplessBuyAll() *table.Table {
 	return table.NewCraplessTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
 		},
@@ -141,7 +141,7 @@ func (gr *GameRunner) setupCraplessBuyAll() *table.Table {
 
 func (gr *GameRunner) setupRegularBuyAll() *table.Table {
 	return table.NewRegularTable(
-		dice.SeededDice{},
+		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
 		},
