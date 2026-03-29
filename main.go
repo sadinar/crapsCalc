@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	numRuns := 100000000
+	numRuns := 1000000
 	workerCount := 20
 	results := make([]int, numRuns)
 
-	mgr := runtime.NewManager(numRuns, workerCount)
+	mgr := runtime.NewManager(numRuns, workerCount, runtime.RegularComePass)
 	mgr.SimulateGames(results)
 	printStats(results)
 }

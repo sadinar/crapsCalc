@@ -8,22 +8,24 @@ import (
 )
 
 type Manager struct {
-	numberOfRuns  int
-	workerCount   int
-	taskChannel   chan int
-	resultChannel chan int
-	workerWg      *sync.WaitGroup
-	collectionWg  *sync.WaitGroup
+	tableConfiguration string
+	numberOfRuns       int
+	workerCount        int
+	taskChannel        chan int
+	resultChannel      chan int
+	workerWg           *sync.WaitGroup
+	collectionWg       *sync.WaitGroup
 }
 
-func NewManager(numberOfRuns int, workerCount int) *Manager {
+func NewManager(numberOfRuns int, workerCount int, tableConfiguration string) *Manager {
 	return &Manager{
-		numberOfRuns:  numberOfRuns,
-		workerCount:   workerCount,
-		taskChannel:   make(chan int, workerCount),
-		resultChannel: make(chan int, workerCount),
-		workerWg:      &sync.WaitGroup{},
-		collectionWg:  &sync.WaitGroup{},
+		tableConfiguration: tableConfiguration,
+		numberOfRuns:       numberOfRuns,
+		workerCount:        workerCount,
+		taskChannel:        make(chan int, workerCount),
+		resultChannel:      make(chan int, workerCount),
+		workerWg:           &sync.WaitGroup{},
+		collectionWg:       &sync.WaitGroup{},
 	}
 }
 
@@ -58,7 +60,7 @@ func (rm *Manager) runWorkers() {
 			inputChannel:  rm.taskChannel,
 			outputChannel: rm.resultChannel,
 		}
-		go gr.Start()
+		go gr.Start(rm.tableConfiguration)
 	}
 }
 

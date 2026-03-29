@@ -25,11 +25,11 @@ type GameRunner struct {
 	outputChannel chan int
 }
 
-func (gr *GameRunner) Start() {
+func (gr *GameRunner) Start(tableConfiguration string) {
 	defer gr.wg.Done()
 
 	for range gr.inputChannel {
-		gr.playAtTable(RegularComePass, gr.outputChannel)
+		gr.playAtTable(tableConfiguration, gr.outputChannel)
 	}
 }
 
