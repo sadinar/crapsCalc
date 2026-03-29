@@ -41,15 +41,19 @@ func NewCraplessTable(dice dice.RollGenerator, gamblers []*player.Gambler) *Tabl
 
 func (t *Table) Shoot() {
 	t.sevenOutLastRound = false
-	t.offerLineBets()
 	roll := t.dice.Roll()
 
 	if t.point == ruleset.PointOff {
+		for _, gambler := range t.gamblers {
+			gambler.OfferPassLineBet()
+		}
+
 		t.handlePointOffRoll(roll)
 		return
 	}
 
 	for _, person := range t.gamblers {
+		person.OfferComeLineBet()
 		person.OfferBuyBets(t.ruleset.GetAllowedBuyPoints())
 	}
 	t.handlePointOnRoll(roll)
@@ -166,19 +170,6 @@ func (t *Table) cleanupAfterPointCrapout() {
 	t.sevenOutLastRound = true
 }
 
-func (t *Table) offerLineBets() {
-	if t.point == ruleset.PointOff {
-		for _, gambler := range t.gamblers {
-			gambler.OfferPassLineBet()
-		}
-		return
-	}
-
-	for _, gambler := range t.gamblers {
-		gambler.OfferComeLineBet()
-	}
-}
-
 func (t *Table) handleComeOutWin() {
 	for _, person := range t.gamblers {
 		if person.GetPassLineBet() > 0 {
@@ -221,7 +212,6 @@ func (t *Table) handlePointHit(roll int) {
 	}
 
 	t.point = ruleset.PointOff
-	t.offerLineBets()
 }
 
 func (t *Table) moveComeLineBetUpAndOfferOdds(person *player.Gambler, roll int) {

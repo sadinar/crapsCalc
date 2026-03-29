@@ -190,14 +190,14 @@ func TestNewPointPaysOldBets(t *testing.T) {
 	assert.Equal(t, 290, tbl.gamblers[0].GetBank())
 
 	tbl.Shoot()
-	assert.Equal(t, 15, tbl.gamblers[0].GetPassLineBet())
+	assert.Equal(t, 0, tbl.gamblers[0].GetPassLineBet())
 	assert.Equal(t, 45, tbl.gamblers[0].GetOddsBet(4))
 	assert.Equal(t, 15, tbl.gamblers[0].GetComeBet(4))
 	assert.Equal(t, 15, tbl.gamblers[0].GetComeBet(8))
 	assert.Equal(t, 15, tbl.gamblers[0].GetComeBet(10))
 	assert.Equal(t, 75, tbl.gamblers[0].GetOddsBet(8))
 	assert.Equal(t, 45, tbl.gamblers[0].GetOddsBet(10))
-	assert.Equal(t, 380, tbl.gamblers[0].GetBank())
+	assert.Equal(t, 395, tbl.gamblers[0].GetBank())
 
 	tbl.Shoot()
 	assert.Equal(t, 15, tbl.gamblers[0].GetPassLineBet())
