@@ -3,7 +3,7 @@ package ruleset
 const PointOff = -1
 
 type Ruleset interface {
-	IsPossiblePoint(roll int) bool
+	IsPointBoxNumber(roll int) bool
 	IsComeOutRollWin(roll, currentPoint int) bool
 	IsComeOutRollLoss(roll, currentPoint int) bool
 	IsNewPointSet(roll, currentPoint int) bool

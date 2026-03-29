@@ -43,8 +43,33 @@ func (t *Table) Shoot() {
 	t.sevenOutLastRound = false
 	t.offerLineBets()
 	roll := t.dice.Roll()
-	//fmt.Println("roll of: ", roll)
 
+	if t.point == ruleset.PointOff {
+		t.handlePointOffRoll(roll)
+		return
+	}
+
+	t.handlePointOnRoll(roll)
+}
+
+func (t *Table) GetRoundCount() int {
+	return t.roundCounter
+}
+
+func (t *Table) LastRoundEndedOnSeven() bool {
+	return t.sevenOutLastRound
+}
+
+func (t *Table) GetPlayerBanks() []int {
+	banks := make([]int, 0)
+	for _, person := range t.gamblers {
+		banks = append(banks, person.GetBank())
+	}
+
+	return banks
+}
+
+func (t *Table) handlePointOffRoll(roll int) {
 	if t.ruleset.IsComeOutRollWin(roll, t.point) {
 		t.handleComeOutWin()
 		return
@@ -58,29 +83,32 @@ func (t *Table) Shoot() {
 	}
 
 	if t.ruleset.IsNewPointSet(roll, t.point) {
-		for _, person := range t.gamblers {
-			if person.GetComeBet(roll) > 0 {
-				person.ReceiveMoney(
-					t.house.PayComeOutWin(person.GetComeBet(roll)),
-				)
-				person.ReturnComeBet(roll)
-				person.ReturnOddsBet(roll)
-			}
+		t.cleanupAfterNewPoint(roll)
+	}
+}
 
-			person.OfferOddsBet(roll)
-			person.OfferBuyBets(t.ruleset.GetAllowedBuyPoints())
+func (t *Table) cleanupAfterNewPoint(roll int) {
+	for _, person := range t.gamblers {
+		if person.GetComeBet(roll) > 0 {
+			person.ReceiveMoney(
+				t.house.PayComeOutWin(person.GetComeBet(roll)),
+			)
+			person.ReturnComeBet(roll)
+			person.ReturnOddsBet(roll)
 		}
 
-		t.point = roll
-		return
+		person.OfferOddsBet(roll)
+		person.OfferBuyBets(t.ruleset.GetAllowedBuyPoints()) // todo can probably move this to the special phase handling instead
 	}
 
+	t.point = roll
+}
+
+func (t *Table) handlePointOnRoll(roll int) {
 	if t.ruleset.IsPointHit(roll, t.point) {
 		t.handlePointHit(roll)
 
-		//fmt.Println("Point hit! Round ends in win!")
 		t.roundCounter++
-		//t.printPlayerBanks()
 		return
 	}
 
@@ -101,14 +129,12 @@ func (t *Table) Shoot() {
 
 		t.point = ruleset.PointOff
 
-		//fmt.Println("Seven rolled! Round ends in a loss. Whomp whomp.")
 		t.roundCounter++
 		t.sevenOutLastRound = true
-		//t.printPlayerBanks()
 		return
 	}
 
-	if t.ruleset.IsPossiblePoint(roll) {
+	if t.ruleset.IsPointBoxNumber(roll) {
 		t.handleOffPointRoll(roll)
 		return
 	}
@@ -132,23 +158,6 @@ func (t *Table) Shoot() {
 			}
 		}
 	}
-}
-
-func (t *Table) GetRoundCount() int {
-	return t.roundCounter
-}
-
-func (t *Table) LastRoundEndedOnSeven() bool {
-	return t.sevenOutLastRound
-}
-
-func (t *Table) GetPlayerBanks() []int {
-	banks := make([]int, 0)
-	for _, person := range t.gamblers {
-		banks = append(banks, person.GetBank())
-	}
-
-	return banks
 }
 
 func (t *Table) offerLineBets() {

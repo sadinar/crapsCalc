@@ -4,7 +4,7 @@ type Regular struct {
 	name string
 }
 
-func (r Regular) IsPossiblePoint(roll int) bool {
+func (r Regular) IsPointBoxNumber(roll int) bool {
 	if roll < 4 {
 		return false
 	}

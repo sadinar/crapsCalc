@@ -8,12 +8,12 @@ import (
 
 func TestIsPossibleCraplessPoint(t *testing.T) {
 	ct := Crapless{}
-	assert.True(t, ct.IsPossiblePoint(2))
-	assert.True(t, ct.IsPossiblePoint(3))
-	assert.True(t, ct.IsPossiblePoint(8))
-	assert.True(t, ct.IsPossiblePoint(11))
-	assert.True(t, ct.IsPossiblePoint(12))
-	assert.False(t, ct.IsPossiblePoint(7))
+	assert.True(t, ct.IsPointBoxNumber(2))
+	assert.True(t, ct.IsPointBoxNumber(3))
+	assert.True(t, ct.IsPointBoxNumber(8))
+	assert.True(t, ct.IsPointBoxNumber(11))
+	assert.True(t, ct.IsPointBoxNumber(12))
+	assert.False(t, ct.IsPointBoxNumber(7))
 }
 
 func TestIsCraplessComeOutWin(t *testing.T) {

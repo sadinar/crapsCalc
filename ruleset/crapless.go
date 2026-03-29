@@ -2,7 +2,7 @@ package ruleset
 
 type Crapless struct{}
 
-func (c Crapless) IsPossiblePoint(roll int) bool {
+func (c Crapless) IsPointBoxNumber(roll int) bool {
 	return roll != 7
 }
 

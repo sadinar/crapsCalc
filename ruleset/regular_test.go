@@ -88,16 +88,16 @@ func TestIsComeOutRollLoss(t *testing.T) {
 
 func TestIsPossiblePoint(t *testing.T) {
 	rr := Regular{}
-	assert.False(t, rr.IsPossiblePoint(2))
-	assert.False(t, rr.IsPossiblePoint(3))
-	assert.True(t, rr.IsPossiblePoint(4))
-	assert.True(t, rr.IsPossiblePoint(5))
-	assert.True(t, rr.IsPossiblePoint(6))
-	assert.True(t, rr.IsPossiblePoint(8))
-	assert.True(t, rr.IsPossiblePoint(9))
-	assert.True(t, rr.IsPossiblePoint(10))
-	assert.False(t, rr.IsPossiblePoint(11))
-	assert.False(t, rr.IsPossiblePoint(7))
+	assert.False(t, rr.IsPointBoxNumber(2))
+	assert.False(t, rr.IsPointBoxNumber(3))
+	assert.True(t, rr.IsPointBoxNumber(4))
+	assert.True(t, rr.IsPointBoxNumber(5))
+	assert.True(t, rr.IsPointBoxNumber(6))
+	assert.True(t, rr.IsPointBoxNumber(8))
+	assert.True(t, rr.IsPointBoxNumber(9))
+	assert.True(t, rr.IsPointBoxNumber(10))
+	assert.False(t, rr.IsPointBoxNumber(11))
+	assert.False(t, rr.IsPointBoxNumber(7))
 }
 
 func TestIsComeLineWin(t *testing.T) {
