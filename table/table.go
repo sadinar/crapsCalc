@@ -5,7 +5,6 @@ import (
 	"crapsSimulator/house"
 	"crapsSimulator/player"
 	"crapsSimulator/ruleset"
-	"fmt"
 )
 
 type Table struct {
@@ -234,11 +233,5 @@ func (t *Table) rewardOddsBet(person *player.Gambler, roll int) {
 			t.house.PayOddsWin(person.GetOddsBet(roll), roll),
 		)
 		person.ReturnOddsBet(roll)
-	}
-}
-
-func (t *Table) printPlayerBanks() {
-	for _, person := range t.gamblers {
-		fmt.Println(person.GetBank())
 	}
 }

@@ -1,4 +1,4 @@
-package strategy
+package ruleset
 
 func GetStdOddsMultipliers() map[int]int {
 	return map[int]int{

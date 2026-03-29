@@ -3,6 +3,7 @@ package runtime
 import (
 	"crapsSimulator/dice"
 	"crapsSimulator/player"
+	"crapsSimulator/ruleset"
 	"crapsSimulator/strategy"
 	"crapsSimulator/table"
 	"sync"
@@ -71,7 +72,7 @@ func (gr *GameRunner) setupRegularComePass() *table.Table {
 	return table.NewRegularTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 0),
 		},
 	)
 }
@@ -80,7 +81,7 @@ func (gr *GameRunner) setupCraplessComePass() *table.Table {
 	return table.NewCraplessTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.GetStdOddsMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 0),
 		},
 	)
 }
@@ -89,7 +90,7 @@ func (gr *GameRunner) setupStratosphereComePass() *table.Table {
 	return table.NewCraplessTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get100xMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.Get100xMultipliers()), 0),
 		},
 	)
 }
@@ -98,7 +99,7 @@ func (gr *GameRunner) setupHorseshoeDigitalComePass() *table.Table {
 	return table.NewRegularTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, strategy.Get2xMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.Get2xMultipliers()), 0),
 		},
 	)
 }

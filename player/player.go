@@ -1,6 +1,8 @@
 package player
 
-import strategy2 "crapsSimulator/strategy"
+import (
+	strategy2 "crapsSimulator/strategy"
+)
 
 type Gambler struct {
 	buyBets     map[int]int

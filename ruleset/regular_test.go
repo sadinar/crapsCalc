@@ -74,6 +74,7 @@ func TestIsComeOutRollWin(t *testing.T) {
 	assert.True(t, rr.IsComeOutRollWin(7, PointOff))
 	assert.True(t, rr.IsComeOutRollWin(11, PointOff))
 }
+
 func TestIsComeOutRollLoss(t *testing.T) {
 	rr := Regular{}
 	assert.True(t, rr.IsComeOutRollLoss(2, PointOff))
@@ -83,4 +84,47 @@ func TestIsComeOutRollLoss(t *testing.T) {
 	assert.False(t, rr.IsComeOutRollLoss(8, PointOff))
 	assert.False(t, rr.IsComeOutRollLoss(7, PointOff))
 	assert.False(t, rr.IsComeOutRollLoss(11, PointOff))
+}
+
+func TestIsPossiblePoint(t *testing.T) {
+	rr := Regular{}
+	assert.False(t, rr.IsPossiblePoint(2))
+	assert.False(t, rr.IsPossiblePoint(3))
+	assert.True(t, rr.IsPossiblePoint(4))
+	assert.True(t, rr.IsPossiblePoint(5))
+	assert.True(t, rr.IsPossiblePoint(6))
+	assert.True(t, rr.IsPossiblePoint(8))
+	assert.True(t, rr.IsPossiblePoint(9))
+	assert.True(t, rr.IsPossiblePoint(10))
+	assert.False(t, rr.IsPossiblePoint(11))
+	assert.False(t, rr.IsPossiblePoint(7))
+}
+
+func TestIsComeLineWin(t *testing.T) {
+	rr := Regular{}
+	assert.True(t, rr.IsComeLineWin(7))
+	assert.True(t, rr.IsComeLineWin(11))
+	assert.False(t, rr.IsComeLineWin(12))
+	assert.False(t, rr.IsComeLineWin(2))
+	assert.False(t, rr.IsComeLineWin(8))
+	assert.False(t, rr.IsComeLineWin(3))
+}
+
+func TestIsComeLineLoss(t *testing.T) {
+	rr := Regular{}
+	assert.False(t, rr.IsComeLineLoss(7))
+	assert.False(t, rr.IsComeLineLoss(11))
+	assert.False(t, rr.IsComeLineLoss(9))
+	assert.True(t, rr.IsComeLineLoss(12))
+	assert.True(t, rr.IsComeLineLoss(2))
+	assert.True(t, rr.IsComeLineLoss(3))
+}
+
+func TestGetAllowedBuyPoints(t *testing.T) {
+	rr := Regular{}
+	assert.Equal(
+		t,
+		[]int{4, 5, 6, 8, 9, 10},
+		rr.GetAllowedBuyPoints(),
+	)
 }
