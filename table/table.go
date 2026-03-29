@@ -94,22 +94,6 @@ func (t *Table) handlePointOffRoll(roll int) {
 	}
 }
 
-func (t *Table) cleanupAfterNewPoint(roll int) {
-	for _, person := range t.gamblers {
-		if person.GetComeBet(roll) > 0 {
-			person.ReceiveMoney(
-				t.house.PayComeOutWin(person.GetComeBet(roll)),
-			)
-			person.ReturnComeBet(roll)
-			person.ReturnOddsBet(roll)
-		}
-
-		person.OfferOddsBet(roll)
-	}
-
-	t.point = roll
-}
-
 func (t *Table) handlePointOnRoll(roll int) {
 	if t.ruleset.IsPointHit(roll, t.point) {
 		t.handlePointHit(roll)
@@ -129,22 +113,46 @@ func (t *Table) handlePointOnRoll(roll int) {
 	}
 
 	if t.ruleset.IsComeLineWin(roll) {
-		for _, person := range t.gamblers {
-			if person.GetComeLineBet() > 0 {
-				person.ReceiveMoney(
-					t.house.PayComeOutWin(person.GetComeLineBet()),
-				)
-			}
-			person.ReturnComeLineBet()
-		}
+		t.processComeLineWin()
 		return
 	}
 
 	if t.ruleset.IsComeLineLoss(roll) {
-		for _, person := range t.gamblers {
-			if person.GetComeLineBet() > 0 {
-				person.RemoveComeLineBet()
-			}
+		t.processComeLineLoss()
+	}
+}
+
+func (t *Table) cleanupAfterNewPoint(roll int) {
+	for _, person := range t.gamblers {
+		if person.GetComeBet(roll) > 0 {
+			person.ReceiveMoney(
+				t.house.PayComeOutWin(person.GetComeBet(roll)),
+			)
+			person.ReturnComeBet(roll)
+			person.ReturnOddsBet(roll)
+		}
+
+		person.OfferOddsBet(roll)
+	}
+
+	t.point = roll
+}
+
+func (t *Table) processComeLineWin() {
+	for _, person := range t.gamblers {
+		if person.GetComeLineBet() > 0 {
+			person.ReceiveMoney(
+				t.house.PayComeOutWin(person.GetComeLineBet()),
+			)
+		}
+		person.ReturnComeLineBet()
+	}
+}
+
+func (t *Table) processComeLineLoss() {
+	for _, person := range t.gamblers {
+		if person.GetComeLineBet() > 0 {
+			person.RemoveComeLineBet()
 		}
 	}
 }
