@@ -120,8 +120,8 @@ func TestBuyPayoutAndOffer(t *testing.T) {
 
 	tbl.Shoot()
 	tbl.Shoot()
-	assert.Equal(t, 515, tbl.gamblers[0].GetBank())
-	assert.Equal(t, 100, tbl.gamblers[0].GetBuyBet(8))
+	assert.Equal(t, 615, tbl.gamblers[0].GetBank())
+	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(8))
 	assert.Equal(t, 4, tbl.point)
 }
 
@@ -439,9 +439,14 @@ func TestBuyExtremes(t *testing.T) {
 	}
 
 	tbl.Shoot()
-	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(2))
+	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(2))
+	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(12))
+	assert.Equal(t, 500, tbl.gamblers[0].GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(2))
 	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(12))
-	assert.Equal(t, 450, tbl.gamblers[0].GetBank())
+	assert.Equal(t, 624, tbl.gamblers[0].GetBank())
 
 	tbl.Shoot()
 	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(2))
@@ -450,18 +455,13 @@ func TestBuyExtremes(t *testing.T) {
 
 	tbl.Shoot()
 	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(2))
-	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(12))
-	assert.Equal(t, 599, tbl.gamblers[0].GetBank())
+	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(12))
+	assert.Equal(t, 773, tbl.gamblers[0].GetBank())
 
 	tbl.Shoot()
 	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(2))
-	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(12))
-	assert.Equal(t, 748, tbl.gamblers[0].GetBank())
-
-	tbl.Shoot()
-	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(2))
-	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(12))
-	assert.Equal(t, 897, tbl.gamblers[0].GetBank())
+	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(12))
+	assert.Equal(t, 922, tbl.gamblers[0].GetBank())
 
 	tbl.Shoot()
 	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(2))
@@ -479,9 +479,9 @@ func TestBuyExtremes(t *testing.T) {
 	assert.Equal(t, 897, tbl.gamblers[0].GetBank())
 
 	tbl.Shoot()
-	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(2))
+	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(2))
 	assert.Equal(t, 25, tbl.gamblers[0].GetBuyBet(12))
-	assert.Equal(t, 1046, tbl.gamblers[0].GetBank())
+	assert.Equal(t, 1071, tbl.gamblers[0].GetBank())
 
 	tbl.Shoot()
 	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(2))

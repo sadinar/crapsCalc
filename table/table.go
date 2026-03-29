@@ -49,6 +49,9 @@ func (t *Table) Shoot() {
 		return
 	}
 
+	for _, person := range t.gamblers {
+		person.OfferBuyBets(t.ruleset.GetAllowedBuyPoints())
+	}
 	t.handlePointOnRoll(roll)
 }
 
@@ -98,7 +101,6 @@ func (t *Table) cleanupAfterNewPoint(roll int) {
 		}
 
 		person.OfferOddsBet(roll)
-		person.OfferBuyBets(t.ruleset.GetAllowedBuyPoints()) // todo can probably move this to the special phase handling instead
 	}
 
 	t.point = roll
@@ -113,24 +115,7 @@ func (t *Table) handlePointOnRoll(roll int) {
 	}
 
 	if t.ruleset.HasPointEndedInCraps(roll, t.point) {
-		for _, person := range t.gamblers {
-			if person.GetComeLineBet() > 0 {
-				person.ReceiveMoney(
-					t.house.PayComeOutWin(person.GetComeLineBet()),
-				)
-				person.ReturnComeLineBet()
-			}
-
-			person.RemovePassLineBet()
-			person.RemoveAllComeBets()
-			person.RemoveAllOddsBets()
-			person.RemoveAllBuyBets()
-		}
-
-		t.point = ruleset.PointOff
-
-		t.roundCounter++
-		t.sevenOutLastRound = true
+		t.cleanupAfterPointCrapout()
 		return
 	}
 
@@ -158,6 +143,27 @@ func (t *Table) handlePointOnRoll(roll int) {
 			}
 		}
 	}
+}
+
+func (t *Table) cleanupAfterPointCrapout() {
+	for _, person := range t.gamblers {
+		if person.GetComeLineBet() > 0 {
+			person.ReceiveMoney(
+				t.house.PayComeOutWin(person.GetComeLineBet()),
+			)
+			person.ReturnComeLineBet()
+		}
+
+		person.RemovePassLineBet()
+		person.RemoveAllComeBets()
+		person.RemoveAllOddsBets()
+		person.RemoveAllBuyBets()
+	}
+
+	t.point = ruleset.PointOff
+
+	t.roundCounter++
+	t.sevenOutLastRound = true
 }
 
 func (t *Table) offerLineBets() {
@@ -197,7 +203,6 @@ func (t *Table) handleOffPointRoll(roll int) {
 		}
 
 		t.moveComeLineBetUpAndOfferOdds(person, roll)
-		person.OfferBuyBets(t.ruleset.GetAllowedBuyPoints())
 	}
 }
 
