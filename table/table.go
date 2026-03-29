@@ -46,6 +46,7 @@ func (t *Table) Shoot() {
 	if t.point == ruleset.PointOff {
 		for _, gambler := range t.gamblers {
 			gambler.OfferPassLineBet()
+			gambler.OfferDontPassBet()
 		}
 
 		t.handlePointOffRoll(roll)
@@ -79,14 +80,24 @@ func (t *Table) GetPlayerBanks() []int {
 func (t *Table) handlePointOffRoll(roll int) {
 	if t.ruleset.IsComeOutRollWin(roll, t.point) {
 		t.handleComeOutWin()
-		return
 	}
 
 	if t.ruleset.IsComeOutRollLoss(roll, t.point) {
 		for _, person := range t.gamblers {
 			person.RemovePassLineBet()
 		}
-		return
+	}
+
+	if t.ruleset.IsDontPassWin(roll) {
+		t.handleDontPassComeOutWin()
+	}
+
+	if t.ruleset.IsDontPassTie(roll) {
+		t.handleDontPassComeOutTie()
+	}
+
+	if t.ruleset.IsDontPassLoss(roll) {
+		t.handleDontPassComeOutLoss()
 	}
 
 	if t.ruleset.IsNewPointSet(roll, t.point) {
@@ -97,12 +108,14 @@ func (t *Table) handlePointOffRoll(roll int) {
 func (t *Table) handlePointOnRoll(roll int) {
 	if t.ruleset.IsPointHit(roll, t.point) {
 		t.handlePointHit(roll)
+		t.handleDontPassLoss()
 
 		t.roundCounter++
 		return
 	}
 
 	if t.ruleset.HasPointEndedInCraps(roll, t.point) {
+		t.handleDontPassWin()
 		t.cleanupAfterPointCrapout()
 		return
 	}
@@ -119,6 +132,48 @@ func (t *Table) handlePointOnRoll(roll int) {
 
 	if t.ruleset.IsComeLineLoss(roll) {
 		t.processComeLineLoss()
+	}
+}
+
+func (t *Table) handleDontPassWin() {
+	for _, person := range t.gamblers {
+		if person.GetDontPassBet() > 0 {
+			person.ReceiveMoney(t.house.PayNoPassWin(person.GetDontPassBet()))
+			person.ReturnDontPassBet()
+		}
+	}
+}
+
+func (t *Table) handleDontPassLoss() {
+	for _, person := range t.gamblers {
+		if person.GetDontPassBet() > 0 {
+			person.RemoveDontPassBet()
+		}
+	}
+}
+
+func (t *Table) handleDontPassComeOutWin() {
+	for _, person := range t.gamblers {
+		if person.GetDontPassBet() > 0 {
+			person.ReceiveMoney(t.house.PayNoPassWin(person.GetDontPassBet()))
+			person.ReturnDontPassBet()
+		}
+	}
+}
+
+func (t *Table) handleDontPassComeOutTie() {
+	for _, person := range t.gamblers {
+		if person.GetDontPassBet() > 0 {
+			person.ReturnDontPassBet()
+		}
+	}
+}
+
+func (t *Table) handleDontPassComeOutLoss() {
+	for _, person := range t.gamblers {
+		if person.GetDontPassBet() > 0 {
+			person.RemoveDontPassBet()
+		}
 	}
 }
 

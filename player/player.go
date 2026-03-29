@@ -10,6 +10,7 @@ type Gambler struct {
 	comeLineBet int
 	comeBets    map[int]int
 	oddsBets    map[int]int
+	dontPassBet int
 	bank        int
 	strategy    strategy2.Strategy
 }
@@ -71,6 +72,11 @@ func (p *Gambler) RemoveComeLineBet() {
 	p.comeLineBet = 0
 }
 
+func (p *Gambler) ReturnComeLineBet() {
+	p.bank += p.comeLineBet
+	p.comeLineBet = 0
+}
+
 func (p *Gambler) SetComeBet(bet, point int) {
 	p.comeBets[point] = bet
 }
@@ -82,6 +88,12 @@ func (p *Gambler) GetComeBet(point int) int {
 func (p *Gambler) ReturnComeBet(point int) {
 	p.bank += p.comeBets[point]
 	p.comeBets[point] = 0
+}
+
+func (p *Gambler) RemoveAllComeBets() {
+	for i, _ := range p.comeBets {
+		p.comeBets[i] = 0
+	}
 }
 
 func (p *Gambler) OfferOddsBet(point int) {
@@ -96,6 +108,12 @@ func (p *Gambler) GetOddsBet(point int) int {
 func (p *Gambler) ReturnOddsBet(roll int) {
 	p.bank += p.oddsBets[roll]
 	p.oddsBets[roll] = 0
+}
+
+func (p *Gambler) RemoveAllOddsBets() {
+	for i, _ := range p.oddsBets {
+		p.oddsBets[i] = 0
+	}
 }
 
 func (p *Gambler) OfferBuyBets(allowedPoints []int) {
@@ -116,25 +134,38 @@ func (p *Gambler) ReturnBuyBet(point int) {
 	p.buyBets[point] = 0
 }
 
-func (p *Gambler) RemoveAllOddsBets() {
-	for i, _ := range p.oddsBets {
-		p.oddsBets[i] = 0
-	}
-}
-
 func (p *Gambler) RemoveAllBuyBets() {
 	for i, _ := range p.buyBets {
 		p.buyBets[i] = 0
 	}
 }
 
-func (p *Gambler) RemoveAllComeBets() {
-	for i, _ := range p.comeBets {
-		p.comeBets[i] = 0
+func (p *Gambler) OfferDontPassBet() {
+	if p.dontPassBet > 0 {
+		return
 	}
+
+	p.dontPassBet = p.strategy.GetDontPassAmount()
+	p.bank -= p.dontPassBet
 }
 
-func (p *Gambler) ReturnComeLineBet() {
-	p.bank += p.comeLineBet
-	p.comeLineBet = 0
+func (p *Gambler) GetDontPassBet() int {
+	return p.dontPassBet
 }
+
+func (p *Gambler) ReturnDontPassBet() {
+	p.bank += p.dontPassBet
+	p.dontPassBet = 0
+}
+
+func (p *Gambler) RemoveDontPassBet() {
+	p.dontPassBet = 0
+}
+
+// remove don't pass
+
+// offer don't come
+// get don't come
+
+// offer lay odds
+// get lay odds

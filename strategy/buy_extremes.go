@@ -6,6 +6,10 @@ type BuyExtremes struct {
 	includeFourTen     bool
 }
 
+func (b BuyExtremes) GetDontPassAmount() int {
+	return 0
+}
+
 func NewBuyExtremesStrategy(betAmount int, includeThreeEleven, includeFourTen bool) *BuyExtremes {
 	return &BuyExtremes{
 		betAmount:          betAmount,

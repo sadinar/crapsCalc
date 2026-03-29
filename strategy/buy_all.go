@@ -4,6 +4,10 @@ type BuyAllStrategy struct {
 	buyAmount int
 }
 
+func (b BuyAllStrategy) GetDontPassAmount() int {
+	return 0
+}
+
 func NewBuyAllStrategy(amount int) *BuyAllStrategy {
 	return &BuyAllStrategy{
 		buyAmount: amount,

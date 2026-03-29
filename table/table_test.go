@@ -92,6 +92,10 @@ func TestTableSetsNewPointAndOffersBets(t *testing.T) {
 
 type BuyEightStrategy struct{}
 
+func (b BuyEightStrategy) GetDontPassAmount() int {
+	return 0
+}
+
 func (b BuyEightStrategy) GetPassLineAmount() int {
 	return 0
 }
@@ -487,4 +491,65 @@ func TestBuyExtremes(t *testing.T) {
 	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(2))
 	assert.Equal(t, 0, tbl.gamblers[0].GetBuyBet(12))
 	assert.Equal(t, 1046, tbl.gamblers[0].GetBank())
+}
+
+func TestDontPass(t *testing.T) {
+	darkSide := player.NewPlayer(strategy.NewDoNotPass(11), 613)
+	tbl := Table{
+		dice:     &FixedDice{returnVals: []int{8, 2, 3, 11, 7, 9, 9, 12, 2, 3, 7, 11, 5, 5}},
+		ruleset:  ruleset.Regular{},
+		point:    ruleset.PointOff,
+		gamblers: []*player.Gambler{darkSide},
+		house:    house.Casino{},
+	}
+
+	tbl.Shoot()
+	assert.Equal(t, 11, darkSide.GetDontPassBet())
+	assert.Equal(t, 602, darkSide.GetBank())
+
+	tbl.Shoot()
+	tbl.Shoot()
+	tbl.Shoot()
+	assert.Equal(t, 11, darkSide.GetDontPassBet())
+	assert.Equal(t, 602, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 624, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 11, darkSide.GetDontPassBet())
+	assert.Equal(t, 613, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 613, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 613, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 624, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 635, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 624, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 613, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 11, darkSide.GetDontPassBet())
+	assert.Equal(t, 602, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 602, darkSide.GetBank())
 }

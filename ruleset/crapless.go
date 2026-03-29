@@ -48,3 +48,15 @@ func (c Crapless) GetAllowedBuyPoints() []int {
 		12,
 	}
 }
+
+func (c Crapless) IsDontPassTie(roll int) bool {
+	return false
+}
+
+func (c Crapless) IsDontPassWin(roll int) bool {
+	return false
+}
+
+func (c Crapless) IsDontPassLoss(roll int) bool {
+	return false
+}

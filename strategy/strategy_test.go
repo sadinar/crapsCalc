@@ -88,3 +88,34 @@ func TestGetBuyAmount(t *testing.T) {
 
 	assert.Empty(t, cp.GetBuyAmount(6))
 }
+
+func TestNoPass(t *testing.T) {
+	np := DoNotPass{}
+	assert.Empty(t, np.GetPassLineAmount())
+
+	assert.Empty(t, np.GetOddsAmount(4))
+	assert.Empty(t, np.GetOddsAmount(5))
+	assert.Empty(t, np.GetOddsAmount(6))
+	assert.Empty(t, np.GetOddsAmount(8))
+	assert.Empty(t, np.GetOddsAmount(9))
+	assert.Empty(t, np.GetOddsAmount(10))
+
+	assert.Empty(t, np.GetBuyAmount(4))
+	assert.Empty(t, np.GetBuyAmount(5))
+	assert.Empty(t, np.GetBuyAmount(6))
+	assert.Empty(t, np.GetBuyAmount(8))
+	assert.Empty(t, np.GetBuyAmount(9))
+	assert.Empty(t, np.GetBuyAmount(10))
+
+	np.dontPassAmount = 250
+	assert.Equal(t, 250, np.GetDontPassAmount())
+
+	ba := NewBuyAllStrategy(345)
+	assert.Empty(t, ba.GetDontPassAmount())
+
+	be := BuyExtremes{betAmount: 8765}
+	assert.Empty(t, be.GetDontPassAmount())
+
+	cp := ComePassStrategy{passLineAmount: 8567}
+	assert.Empty(t, cp.GetDontPassAmount())
+}

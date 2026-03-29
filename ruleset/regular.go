@@ -52,3 +52,15 @@ func (r Regular) GetAllowedBuyPoints() []int {
 		10,
 	}
 }
+
+func (r Regular) IsDontPassTie(roll int) bool {
+	return roll == 12
+}
+
+func (r Regular) IsDontPassWin(roll int) bool {
+	return roll == 2 || roll == 3
+}
+
+func (r Regular) IsDontPassLoss(roll int) bool {
+	return roll == 7 || roll == 11
+}

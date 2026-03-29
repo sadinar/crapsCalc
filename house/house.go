@@ -6,6 +6,7 @@ type House interface {
 	PayComeOutWin(bet int) int
 	PayOddsWin(bet, point int) int
 	PayBuyWin(bet, point int) int
+	PayNoPassWin(bet int) int
 }
 
 type Casino struct{}
@@ -49,4 +50,27 @@ func (c Casino) PayBuyWin(bet, point int) int {
 	}
 
 	return baseWinning - commission
+}
+
+func (c Casino) PayNoPassWin(bet int) int {
+	return bet
+}
+
+func (c Casino) PayLayOddsWin(bet, point int) int {
+	switch point {
+	case 4:
+		fallthrough
+	case 10:
+		return bet / 2
+	case 5:
+		fallthrough
+	case 9:
+		return bet * 2 / 3
+	case 6:
+		fallthrough
+	case 8:
+		return bet * 5 / 6
+	}
+
+	panic("not a point value!")
 }

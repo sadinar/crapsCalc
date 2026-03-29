@@ -12,4 +12,7 @@ type Ruleset interface {
 	IsComeLineLoss(roll int) bool
 	HasPointEndedInCraps(roll, currentPoint int) bool
 	GetAllowedBuyPoints() []int
+	IsDontPassTie(roll int) bool
+	IsDontPassWin(roll int) bool
+	IsDontPassLoss(roll int) bool
 }
