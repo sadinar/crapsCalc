@@ -5,23 +5,26 @@ import (
 )
 
 type Gambler struct {
-	buyBets     map[int]int
-	passLineBet int
-	comeLineBet int
-	comeBets    map[int]int
-	oddsBets    map[int]int
-	dontPassBet int
-	bank        int
-	strategy    strategy2.Strategy
+	buyBets         map[int]int
+	passLineBet     int
+	comeLineBet     int
+	comeBets        map[int]int
+	oddsBets        map[int]int
+	dontPassBet     int
+	dontComeLineBet int
+	dontComeBets    map[int]int
+	bank            int
+	strategy        strategy2.Strategy
 }
 
 func NewPlayer(strategy strategy2.Strategy, startingBank int) *Gambler {
 	return &Gambler{
-		strategy: strategy,
-		bank:     startingBank,
-		comeBets: make(map[int]int),
-		oddsBets: make(map[int]int),
-		buyBets:  make(map[int]int),
+		strategy:     strategy,
+		bank:         startingBank,
+		comeBets:     make(map[int]int),
+		oddsBets:     make(map[int]int),
+		buyBets:      make(map[int]int),
+		dontComeBets: make(map[int]int),
 	}
 }
 
@@ -162,10 +165,37 @@ func (p *Gambler) RemoveDontPassBet() {
 	p.dontPassBet = 0
 }
 
-// remove don't pass
+func (p *Gambler) OfferDontComeLineBet() {
+	p.dontComeLineBet = p.strategy.GetDontComeAmount()
+	p.bank -= p.dontComeLineBet
+}
 
-// offer don't come
-// get don't come
+func (p *Gambler) GetDontComeLineBet() int {
+	return p.dontComeLineBet
+}
 
-// offer lay odds
-// get lay odds
+func (p *Gambler) ReturnDontComeLineBet() {
+	p.bank += p.dontComeLineBet
+	p.dontComeLineBet = 0
+}
+
+func (p *Gambler) RemoveDontComeLineBet() {
+	p.dontComeLineBet = 0
+}
+
+func (p *Gambler) GetDontComeBet(point int) int {
+	return p.dontComeBets[point]
+}
+
+func (p *Gambler) SetDontComeBet(bet, point int) {
+	p.dontComeBets[point] = bet
+}
+
+func (p *Gambler) RemoveDontComeBet(roll int) {
+	p.dontComeBets[roll] = 0
+}
+
+func (p *Gambler) ReturnDontComeBet(roll int) {
+	p.bank += p.dontComeBets[roll]
+	p.dontComeBets[roll] = 0
+}

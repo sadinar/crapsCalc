@@ -5,4 +5,5 @@ type Strategy interface {
 	GetOddsAmount(point int) int
 	GetBuyAmount(point int) int
 	GetDontPassAmount() int
+	GetDontComeAmount() int
 }

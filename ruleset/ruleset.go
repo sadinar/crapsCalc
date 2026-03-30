@@ -15,4 +15,5 @@ type Ruleset interface {
 	IsDontPassTie(roll int) bool
 	IsDontPassWin(roll int) bool
 	IsDontPassLoss(roll int) bool
+	GetAllowedDontComePoints() []int
 }

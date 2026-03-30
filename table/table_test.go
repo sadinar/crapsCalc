@@ -92,6 +92,10 @@ func TestTableSetsNewPointAndOffersBets(t *testing.T) {
 
 type BuyEightStrategy struct{}
 
+func (b BuyEightStrategy) GetDontComeAmount() int {
+	return 0
+}
+
 func (b BuyEightStrategy) GetDontPassAmount() int {
 	return 0
 }
@@ -494,7 +498,7 @@ func TestBuyExtremes(t *testing.T) {
 }
 
 func TestDontPass(t *testing.T) {
-	darkSide := player.NewPlayer(strategy.NewDoNotPass(11), 613)
+	darkSide := player.NewPlayer(strategy.NewDontPass(11), 613)
 	tbl := Table{
 		dice:     &FixedDice{returnVals: []int{8, 2, 3, 11, 7, 9, 9, 12, 2, 3, 7, 11, 5, 5}},
 		ruleset:  ruleset.Regular{},
@@ -552,4 +556,81 @@ func TestDontPass(t *testing.T) {
 	tbl.Shoot()
 	assert.Equal(t, 0, darkSide.GetDontPassBet())
 	assert.Equal(t, 602, darkSide.GetBank())
+}
+
+func TestDontCome(t *testing.T) {
+	darkSide := player.NewPlayer(strategy.NewDontComeDontPass(17), 613)
+	tbl := Table{
+		dice:     &FixedDice{returnVals: []int{8, 9, 4, 9, 7, 10, 2, 3, 12, 11}},
+		ruleset:  ruleset.Regular{},
+		point:    ruleset.PointOff,
+		gamblers: []*player.Gambler{darkSide},
+		house:    house.Casino{},
+	}
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 596, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 17, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 579, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 17, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 17, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 562, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 17, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 17, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 545, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 0, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 0, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 630, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 0, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 0, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 613, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 0, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 0, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 630, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 0, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 0, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 647, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 0, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 0, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 647, darkSide.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 17, darkSide.GetDontPassBet())
+	assert.Equal(t, 0, darkSide.GetDontComeLineBet())
+	assert.Equal(t, 0, darkSide.GetDontComeBet(9))
+	assert.Equal(t, 0, darkSide.GetDontComeBet(4))
+	assert.Equal(t, 630, darkSide.GetBank())
 }

@@ -5,6 +5,10 @@ type ComePassStrategy struct {
 	maxOddsMultipliers map[int]int
 }
 
+func (s *ComePassStrategy) GetDontComeAmount() int {
+	return 0
+}
+
 func (s *ComePassStrategy) GetDontPassAmount() int {
 	return 0
 }

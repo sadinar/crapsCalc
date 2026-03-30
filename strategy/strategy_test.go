@@ -90,7 +90,7 @@ func TestGetBuyAmount(t *testing.T) {
 }
 
 func TestNoPass(t *testing.T) {
-	np := DoNotPass{}
+	np := DontComeDontPass{}
 	assert.Empty(t, np.GetPassLineAmount())
 
 	assert.Empty(t, np.GetOddsAmount(4))
@@ -107,7 +107,7 @@ func TestNoPass(t *testing.T) {
 	assert.Empty(t, np.GetBuyAmount(9))
 	assert.Empty(t, np.GetBuyAmount(10))
 
-	np.dontPassAmount = 250
+	np.betAmount = 250
 	assert.Equal(t, 250, np.GetDontPassAmount())
 
 	ba := NewBuyAllStrategy(345)

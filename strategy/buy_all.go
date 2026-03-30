@@ -4,6 +4,10 @@ type BuyAllStrategy struct {
 	buyAmount int
 }
 
+func (b BuyAllStrategy) GetDontComeAmount() int {
+	return 0
+}
+
 func (b BuyAllStrategy) GetDontPassAmount() int {
 	return 0
 }

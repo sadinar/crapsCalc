@@ -64,3 +64,14 @@ func (r Regular) IsDontPassWin(roll int) bool {
 func (r Regular) IsDontPassLoss(roll int) bool {
 	return roll == 7 || roll == 11
 }
+
+func (r Regular) GetAllowedDontComePoints() []int {
+	return []int{
+		4,
+		5,
+		6,
+		8,
+		9,
+		10,
+	}
+}

@@ -6,6 +6,10 @@ type BuyExtremes struct {
 	includeFourTen     bool
 }
 
+func (b BuyExtremes) GetDontComeAmount() int {
+	return 0
+}
+
 func (b BuyExtremes) GetDontPassAmount() int {
 	return 0
 }

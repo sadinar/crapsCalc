@@ -60,3 +60,7 @@ func (c Crapless) IsDontPassWin(roll int) bool {
 func (c Crapless) IsDontPassLoss(roll int) bool {
 	return false
 }
+
+func (c Crapless) GetAllowedDontComePoints() []int {
+	return []int{}
+}
