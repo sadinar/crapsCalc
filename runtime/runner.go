@@ -18,6 +18,7 @@ const CraplessExtremes = "CraplessExtremes"
 const CraplessLeastExtremes = "LeastExtremes"
 const CraplessBuyAll = "BuyAll"
 const RegularBuyAll = "RegularBuyAll"
+const DoNotPassDoNotCome = "DoNotPassDoNotCome"
 
 type GameRunner struct {
 	wg            *sync.WaitGroup
@@ -54,6 +55,8 @@ func (gr *GameRunner) playAtTable(tableType string, resultChannel chan int) {
 		tbl = gr.setupCraplessBuyAll()
 	case RegularBuyAll:
 		tbl = gr.setupRegularBuyAll()
+	case DoNotPassDoNotCome:
+		tbl = gr.setupDoNotPassDoNotCome()
 	default:
 		panic("Unrecognized table type")
 	}
@@ -145,6 +148,15 @@ func (gr *GameRunner) setupRegularBuyAll() *table.Table {
 		dice.NewSeededDice(),
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
+		},
+	)
+}
+
+func (gr *GameRunner) setupDoNotPassDoNotCome() *table.Table {
+	return table.NewRegularTable(
+		dice.NewSeededDice(),
+		[]*player.Gambler{
+			player.NewPlayer(strategy.NewDontComeDontPass(15), 0),
 		},
 	)
 }
