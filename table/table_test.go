@@ -634,3 +634,96 @@ func TestDontCome(t *testing.T) {
 	assert.Equal(t, 0, darkSide.GetDontComeBet(4))
 	assert.Equal(t, 630, darkSide.GetBank())
 }
+
+func TestNoDoubleComeLinePayout(t *testing.T) {
+	comePassPlayer := player.NewPlayer(
+		strategy.NewComePassStrategy(5, ruleset.GetStdOddsMultipliers()),
+		1250,
+	)
+	tbl := Table{
+		dice:     &FixedDice{returnVals: []int{8, 10, 10, 10}},
+		ruleset:  ruleset.Regular{},
+		point:    ruleset.PointOff,
+		gamblers: []*player.Gambler{comePassPlayer},
+		house:    house.Casino{},
+	}
+
+	tbl.Shoot()
+	expectedBank := 1250 - 5 - 25
+	assert.Equal(t, expectedBank, comePassPlayer.GetBank())
+	assert.Equal(t, 5, comePassPlayer.GetPassLineBet())
+	assert.Empty(t, comePassPlayer.GetComeLineBet())
+	assert.Empty(t, comePassPlayer.GetComeBet(8))
+	assert.Empty(t, comePassPlayer.GetComeBet(10))
+
+	tbl.Shoot()
+	expectedBank = expectedBank - 5 - 15
+	assert.Equal(t, expectedBank, comePassPlayer.GetBank())
+	assert.Empty(t, comePassPlayer.GetComeLineBet())
+	assert.Empty(t, comePassPlayer.GetComeBet(8))
+	assert.Equal(t, 5, comePassPlayer.GetComeBet(10))
+	assert.Equal(t, 15, comePassPlayer.GetOddsBet(10))
+
+	tbl.Shoot()
+	expectedBank = expectedBank - 5 + 5 + 5 + 15 + 30 - 15
+	assert.Equal(t, expectedBank, comePassPlayer.GetBank())
+	assert.Empty(t, comePassPlayer.GetComeLineBet())
+	assert.Empty(t, comePassPlayer.GetComeBet(8))
+	assert.Equal(t, 5, comePassPlayer.GetComeBet(10))
+	assert.Equal(t, 15, comePassPlayer.GetOddsBet(10))
+}
+
+func TestBackToBackPoints(t *testing.T) {
+	p := player.NewPlayer(
+		strategy.NewComePassStrategy(5, ruleset.GetStdOddsMultipliers()),
+		1000,
+	)
+
+	tbl := Table{
+		dice:     &FixedDice{returnVals: []int{8, 8, 6, 6}},
+		ruleset:  ruleset.Regular{},
+		point:    ruleset.PointOff,
+		gamblers: []*player.Gambler{p},
+		house:    house.Casino{},
+	}
+
+	tbl.Shoot()
+	assert.Equal(t, 5, p.GetPassLineBet())
+	assert.Equal(t, 0, p.GetComeLineBet())
+	assert.Equal(t, 0, p.GetComeBet(8))
+	assert.Equal(t, 25, p.GetOddsBet(8))
+	assert.Equal(t, 0, p.GetComeBet(6))
+	assert.Equal(t, 0, p.GetOddsBet(6))
+	expectedBank := 1000 - 5 - 25
+	assert.Equal(t, expectedBank, p.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, p.GetPassLineBet())
+	assert.Equal(t, 0, p.GetComeLineBet())
+	assert.Equal(t, 5, p.GetComeBet(8))
+	assert.Equal(t, 25, p.GetOddsBet(8))
+	assert.Equal(t, 0, p.GetComeBet(6))
+	assert.Equal(t, 0, p.GetOddsBet(6))
+	expectedBank = expectedBank - 5 + 5 + 5 + 25 + 30 - 25
+	assert.Equal(t, expectedBank, p.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 5, p.GetPassLineBet())
+	assert.Equal(t, 0, p.GetComeLineBet())
+	assert.Equal(t, 5, p.GetComeBet(8))
+	assert.Equal(t, 25, p.GetOddsBet(8))
+	assert.Equal(t, 0, p.GetComeBet(6))
+	assert.Equal(t, 25, p.GetOddsBet(6))
+	expectedBank = expectedBank - 5 - 25
+	assert.Equal(t, expectedBank, p.GetBank())
+
+	tbl.Shoot()
+	assert.Equal(t, 0, p.GetPassLineBet())
+	assert.Equal(t, 0, p.GetComeLineBet())
+	assert.Equal(t, 5, p.GetComeBet(8))
+	assert.Equal(t, 25, p.GetOddsBet(8))
+	assert.Equal(t, 5, p.GetComeBet(6))
+	assert.Equal(t, 25, p.GetOddsBet(6))
+	expectedBank = expectedBank - 5 + 5 + 5 + 25 + 30 - 25
+	assert.Equal(t, expectedBank, p.GetBank())
+}

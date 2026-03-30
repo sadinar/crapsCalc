@@ -1,7 +1,7 @@
 package player
 
 import (
-	strategy2 "crapsSimulator/strategy"
+	"crapsSimulator/strategy"
 )
 
 type Gambler struct {
@@ -14,10 +14,10 @@ type Gambler struct {
 	dontComeLineBet int
 	dontComeBets    map[int]int
 	bank            int
-	strategy        strategy2.Strategy
+	strategy        strategy.Strategy
 }
 
-func NewPlayer(strategy strategy2.Strategy, startingBank int) *Gambler {
+func NewPlayer(strategy strategy.Strategy, startingBank int) *Gambler {
 	return &Gambler{
 		strategy:     strategy,
 		bank:         startingBank,
