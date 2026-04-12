@@ -1,6 +1,6 @@
-package ruleset
+package odds
 
-func GetStdOddsMultipliers() map[int]int {
+func GetStdMaxOdds() map[int]int {
 	return map[int]int{
 		2:  1,
 		3:  2,
@@ -15,7 +15,7 @@ func GetStdOddsMultipliers() map[int]int {
 	}
 }
 
-func Get100xMultipliers() map[int]int {
+func Get100xMaxOdds() map[int]int {
 	return map[int]int{
 		2:  100,
 		3:  100,
@@ -30,7 +30,7 @@ func Get100xMultipliers() map[int]int {
 	}
 }
 
-func Get2xMultipliers() map[int]int {
+func Get2xMaxOdds() map[int]int {
 	return map[int]int{
 		2:  2,
 		3:  2,

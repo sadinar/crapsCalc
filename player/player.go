@@ -99,8 +99,8 @@ func (p *Gambler) RemoveAllComeBets() {
 	}
 }
 
-func (p *Gambler) OfferOddsBet(point int) {
-	p.oddsBets[point] = p.strategy.GetOddsAmount(point)
+func (p *Gambler) OfferOddsBet(point, maxOddsMultiplier int) {
+	p.oddsBets[point] = p.strategy.GetOddsAmount(point, maxOddsMultiplier)
 	p.bank -= p.oddsBets[point]
 }
 

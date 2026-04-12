@@ -1,7 +1,7 @@
 package strategy
 
 import (
-	"crapsSimulator/ruleset"
+	"crapsSimulator/odds"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,7 +12,7 @@ func TestGetPassLineAmount(t *testing.T) {
 	be := NewBuyExtremesStrategy(5, false, false)
 	be2 := NewBuyExtremesStrategy(5, true, false)
 	be3 := NewBuyExtremesStrategy(5, true, true)
-	cp := NewComePassStrategy(5, ruleset.GetStdOddsMultipliers())
+	cp := NewComePassStrategy(5)
 
 	assert.Empty(t, ba.GetPassLineAmount())
 	assert.Empty(t, be.GetPassLineAmount())
@@ -26,13 +26,14 @@ func TestGetOddsAmount(t *testing.T) {
 	be := NewBuyExtremesStrategy(5, false, false)
 	be2 := NewBuyExtremesStrategy(5, true, false)
 	be3 := NewBuyExtremesStrategy(5, true, true)
-	cp := NewComePassStrategy(5, ruleset.GetStdOddsMultipliers())
+	cp := NewComePassStrategy(5)
 
-	assert.Empty(t, ba.GetOddsAmount(2))
-	assert.Empty(t, be.GetOddsAmount(3))
-	assert.Empty(t, be2.GetOddsAmount(4))
-	assert.Empty(t, be3.GetOddsAmount(5))
-	assert.Equal(t, 5*5, cp.GetOddsAmount(6))
+	stdMaxOdds := odds.GetStdMaxOdds()
+	assert.Empty(t, ba.GetOddsAmount(2, stdMaxOdds[2]))
+	assert.Empty(t, be.GetOddsAmount(3, stdMaxOdds[3]))
+	assert.Empty(t, be2.GetOddsAmount(4, stdMaxOdds[4]))
+	assert.Empty(t, be3.GetOddsAmount(5, stdMaxOdds[5]))
+	assert.Equal(t, 5*5, cp.GetOddsAmount(6, stdMaxOdds[6]))
 }
 
 func TestGetBuyAmount(t *testing.T) {
@@ -40,7 +41,7 @@ func TestGetBuyAmount(t *testing.T) {
 	be := NewBuyExtremesStrategy(5, false, false)
 	be2 := NewBuyExtremesStrategy(5, true, false)
 	be3 := NewBuyExtremesStrategy(5, true, true)
-	cp := NewComePassStrategy(5, ruleset.GetStdOddsMultipliers())
+	cp := NewComePassStrategy(5)
 
 	assert.Equal(t, 5, ba.GetBuyAmount(2))
 	assert.Equal(t, 5, ba.GetBuyAmount(3))
@@ -93,12 +94,12 @@ func TestNoPass(t *testing.T) {
 	np := DontComeDontPass{}
 	assert.Empty(t, np.GetPassLineAmount())
 
-	assert.Empty(t, np.GetOddsAmount(4))
-	assert.Empty(t, np.GetOddsAmount(5))
-	assert.Empty(t, np.GetOddsAmount(6))
-	assert.Empty(t, np.GetOddsAmount(8))
-	assert.Empty(t, np.GetOddsAmount(9))
-	assert.Empty(t, np.GetOddsAmount(10))
+	assert.Empty(t, np.GetOddsAmount(4, 0))
+	assert.Empty(t, np.GetOddsAmount(5, 0))
+	assert.Empty(t, np.GetOddsAmount(6, 0))
+	assert.Empty(t, np.GetOddsAmount(8, 0))
+	assert.Empty(t, np.GetOddsAmount(9, 0))
+	assert.Empty(t, np.GetOddsAmount(10, 0))
 
 	assert.Empty(t, np.GetBuyAmount(4))
 	assert.Empty(t, np.GetBuyAmount(5))

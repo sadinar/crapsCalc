@@ -2,8 +2,8 @@ package runtime
 
 import (
 	"crapsSimulator/dice"
+	"crapsSimulator/odds"
 	"crapsSimulator/player"
-	"crapsSimulator/ruleset"
 	"crapsSimulator/strategy"
 	"crapsSimulator/table"
 	"sync"
@@ -75,8 +75,9 @@ func (gr *GameRunner) setupRegularComePass() *table.Table {
 	return table.NewRegularTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }
 
@@ -84,8 +85,9 @@ func (gr *GameRunner) setupCraplessComePass() *table.Table {
 	return table.NewCraplessTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }
 
@@ -93,8 +95,9 @@ func (gr *GameRunner) setupStratosphereComePass() *table.Table {
 	return table.NewCraplessTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.Get100xMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
 		},
+		odds.Get100xMaxOdds(),
 	)
 }
 
@@ -102,8 +105,9 @@ func (gr *GameRunner) setupHorseshoeDigitalComePass() *table.Table {
 	return table.NewRegularTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.Get2xMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
 		},
+		odds.Get2xMaxOdds(),
 	)
 }
 
@@ -113,6 +117,7 @@ func (gr *GameRunner) setupCraplessFarExtremes() *table.Table {
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, false, false), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }
 
@@ -122,6 +127,7 @@ func (gr *GameRunner) setupCraplessExtremes() *table.Table {
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, false), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }
 
@@ -131,6 +137,7 @@ func (gr *GameRunner) setupCraplessLeastExtremes() *table.Table {
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyExtremesStrategy(25, true, true), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }
 
@@ -140,6 +147,7 @@ func (gr *GameRunner) setupCraplessBuyAll() *table.Table {
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }
 
@@ -149,6 +157,7 @@ func (gr *GameRunner) setupRegularBuyAll() *table.Table {
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewBuyAllStrategy(25), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }
 
@@ -158,5 +167,6 @@ func (gr *GameRunner) setupDoNotPassDoNotCome() *table.Table {
 		[]*player.Gambler{
 			player.NewPlayer(strategy.NewDontComeDontPass(15), 0),
 		},
+		odds.GetStdMaxOdds(),
 	)
 }

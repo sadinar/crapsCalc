@@ -12,7 +12,7 @@ func (d DontPass) GetPassLineAmount() int {
 	return 0
 }
 
-func (d DontPass) GetOddsAmount(point int) int {
+func (d DontPass) GetOddsAmount(point, maxOddsMultiplier int) int {
 	return 0
 }
 
@@ -40,7 +40,7 @@ func (d DontComeDontPass) GetPassLineAmount() int {
 	return 0
 }
 
-func (d DontComeDontPass) GetOddsAmount(point int) int {
+func (d DontComeDontPass) GetOddsAmount(point, maxOddsMultiplier int) int {
 	return 0
 }
 

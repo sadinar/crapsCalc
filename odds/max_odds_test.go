@@ -1,4 +1,4 @@
-package ruleset
+package odds
 
 import (
 	"testing"
@@ -21,7 +21,7 @@ func TestGetStdOddsMultipliers(t *testing.T) {
 			11: 2,
 			12: 1,
 		},
-		GetStdOddsMultipliers(),
+		GetStdMaxOdds(),
 	)
 }
 
@@ -40,7 +40,7 @@ func TestGet100xMultipliers(t *testing.T) {
 			11: 100,
 			12: 100,
 		},
-		Get100xMultipliers(),
+		Get100xMaxOdds(),
 	)
 }
 
@@ -59,6 +59,6 @@ func TestGet2xMultipliers(t *testing.T) {
 			11: 2,
 			12: 2,
 		},
-		Get2xMultipliers(),
+		Get2xMaxOdds(),
 	)
 }

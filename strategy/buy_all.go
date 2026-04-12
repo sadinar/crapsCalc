@@ -22,7 +22,7 @@ func (b BuyAllStrategy) GetPassLineAmount() int {
 	return 0
 }
 
-func (b BuyAllStrategy) GetOddsAmount(point int) int {
+func (b BuyAllStrategy) GetOddsAmount(point, maxOddsMultiplier int) int {
 	return 0
 }
 

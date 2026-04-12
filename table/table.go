@@ -15,9 +15,10 @@ type Table struct {
 	house             house.House
 	roundCounter      int
 	sevenOutLastRound bool
+	maxOdds           map[int]int
 }
 
-func NewRegularTable(dice dice.RollGenerator, gamblers []*player.Gambler) *Table {
+func NewRegularTable(dice dice.RollGenerator, gamblers []*player.Gambler, maxOdds map[int]int) *Table {
 	return &Table{
 		dice:         dice,
 		ruleset:      ruleset.Regular{},
@@ -25,10 +26,11 @@ func NewRegularTable(dice dice.RollGenerator, gamblers []*player.Gambler) *Table
 		gamblers:     gamblers,
 		house:        house.Casino{},
 		roundCounter: 0,
+		maxOdds:      maxOdds,
 	}
 }
 
-func NewCraplessTable(dice dice.RollGenerator, gamblers []*player.Gambler) *Table {
+func NewCraplessTable(dice dice.RollGenerator, gamblers []*player.Gambler, maxOdds map[int]int) *Table {
 	return &Table{
 		dice:         dice,
 		ruleset:      ruleset.Crapless{},
@@ -36,6 +38,7 @@ func NewCraplessTable(dice dice.RollGenerator, gamblers []*player.Gambler) *Tabl
 		gamblers:     gamblers,
 		house:        house.Casino{},
 		roundCounter: 0,
+		maxOdds:      maxOdds,
 	}
 }
 
@@ -329,7 +332,7 @@ func (t *Table) handlePassNewPointActivity(roll int) {
 			person.ReturnOddsBet(roll)
 		}
 
-		person.OfferOddsBet(roll)
+		person.OfferOddsBet(roll, t.maxOdds[roll])
 	}
 }
 
@@ -376,7 +379,7 @@ func (t *Table) moveComeLineBetUpAndOfferOdds(person *player.Gambler, roll int) 
 	if person.GetComeLineBet() > 0 {
 		person.SetComeBet(person.GetComeLineBet(), roll)
 		person.RemoveComeLineBet()
-		person.OfferOddsBet(roll)
+		person.OfferOddsBet(roll, t.maxOdds[roll])
 	}
 }
 

@@ -2,6 +2,7 @@ package table
 
 import (
 	"crapsSimulator/house"
+	"crapsSimulator/odds"
 	"crapsSimulator/player"
 	"crapsSimulator/ruleset"
 	"crapsSimulator/strategy"
@@ -28,8 +29,8 @@ func TestShootHandlesComeOutWinsAndLosses(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(5, ruleset.GetStdOddsMultipliers()), 0),
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(5), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
 		},
 		house: house.Casino{},
 	}
@@ -76,9 +77,10 @@ func TestTableSetsNewPointAndOffersBets(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(5, ruleset.GetStdOddsMultipliers()), 0),
+			player.NewPlayer(strategy.NewComePassStrategy(5), 0),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -104,7 +106,7 @@ func (b BuyEightStrategy) GetPassLineAmount() int {
 	return 0
 }
 
-func (b BuyEightStrategy) GetOddsAmount(point int) int {
+func (b BuyEightStrategy) GetOddsAmount(point, maxOddsMultiplier int) int {
 	return 0
 }
 
@@ -139,9 +141,10 @@ func TestComePayoutAndOffer(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 500),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 500),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -162,9 +165,10 @@ func TestNewPointPaysOldBets(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 500),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 500),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -224,9 +228,10 @@ func TestBackToBackOddsWins(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 500),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 500),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -251,9 +256,10 @@ func TestRoundEndsInSevenRolls(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 500),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 500),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -305,9 +311,10 @@ func TestComeLineWin(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 500),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 500),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -322,9 +329,10 @@ func TestComeLineLoss(t *testing.T) {
 		ruleset: ruleset.Regular{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 500),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 500),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -343,9 +351,10 @@ func TestCraplessPayouts(t *testing.T) {
 		ruleset: ruleset.Crapless{},
 		point:   ruleset.PointOff,
 		gamblers: []*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15, ruleset.GetStdOddsMultipliers()), 500),
+			player.NewPlayer(strategy.NewComePassStrategy(15), 500),
 		},
-		house: house.Casino{},
+		house:   house.Casino{},
+		maxOdds: odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -637,7 +646,7 @@ func TestDontCome(t *testing.T) {
 
 func TestNoDoubleComeLinePayout(t *testing.T) {
 	comePassPlayer := player.NewPlayer(
-		strategy.NewComePassStrategy(5, ruleset.GetStdOddsMultipliers()),
+		strategy.NewComePassStrategy(5),
 		1250,
 	)
 	tbl := Table{
@@ -646,6 +655,7 @@ func TestNoDoubleComeLinePayout(t *testing.T) {
 		point:    ruleset.PointOff,
 		gamblers: []*player.Gambler{comePassPlayer},
 		house:    house.Casino{},
+		maxOdds:  odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()
@@ -675,7 +685,7 @@ func TestNoDoubleComeLinePayout(t *testing.T) {
 
 func TestBackToBackPoints(t *testing.T) {
 	p := player.NewPlayer(
-		strategy.NewComePassStrategy(5, ruleset.GetStdOddsMultipliers()),
+		strategy.NewComePassStrategy(5),
 		1000,
 	)
 
@@ -685,6 +695,7 @@ func TestBackToBackPoints(t *testing.T) {
 		point:    ruleset.PointOff,
 		gamblers: []*player.Gambler{p},
 		house:    house.Casino{},
+		maxOdds:  odds.GetStdMaxOdds(),
 	}
 
 	tbl.Shoot()

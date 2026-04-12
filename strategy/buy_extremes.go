@@ -26,7 +26,7 @@ func (b BuyExtremes) GetPassLineAmount() int {
 	return 0
 }
 
-func (b BuyExtremes) GetOddsAmount(point int) int {
+func (b BuyExtremes) GetOddsAmount(point, maxOddsMultiplier int) int {
 	return 0
 }
 
