@@ -46,7 +46,7 @@ func TestBuyBetMovement(t *testing.T) {
 }
 
 func TestPassLineMovement(t *testing.T) {
-	p := NewPlayer(strategy.NewComePassStrategy(15), 750)
+	p := NewPlayer(strategy.NewComePassMaxOddsStrategy(15), 750)
 
 	p.OfferPassLineBet()
 	assert.Equal(t, 735, p.GetBank())
@@ -79,7 +79,7 @@ func TestOddsMovement(t *testing.T) {
 		11: 2,
 		12: 1,
 	}
-	p := NewPlayer(strategy.NewComePassStrategy(15), 750)
+	p := NewPlayer(strategy.NewComePassMaxOddsStrategy(15), 750)
 
 	p.OfferOddsBet(2, multipliers[2])
 	assert.Equal(t, 735, p.GetBank())
@@ -109,7 +109,7 @@ func TestOddsMovement(t *testing.T) {
 }
 
 func TestComeLineMovement(t *testing.T) {
-	p := NewPlayer(strategy.NewComePassStrategy(100), 1350)
+	p := NewPlayer(strategy.NewComePassMaxOddsStrategy(100), 1350)
 
 	p.OfferComeLineBet()
 	assert.Equal(t, 1250, p.GetBank())
@@ -133,7 +133,7 @@ func TestComeLineMovement(t *testing.T) {
 }
 
 func TestComeMovement(t *testing.T) {
-	p := NewPlayer(strategy.NewComePassStrategy(72), 2800)
+	p := NewPlayer(strategy.NewComePassMaxOddsStrategy(72), 2800)
 
 	p.SetComeBet(72, 6)
 	assert.Equal(t, 2800, p.GetBank())

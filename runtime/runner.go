@@ -75,7 +75,7 @@ func (gr *GameRunner) setupRegularComePass() *table.Table {
 	return table.NewRegularTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
+			player.NewPlayer(strategy.NewComePassMaxOddsStrategy(15), 0),
 		},
 		odds.GetStdMaxOdds(),
 	)
@@ -85,7 +85,7 @@ func (gr *GameRunner) setupCraplessComePass() *table.Table {
 	return table.NewCraplessTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
+			player.NewPlayer(strategy.NewComePassMaxOddsStrategy(15), 0),
 		},
 		odds.GetStdMaxOdds(),
 	)
@@ -95,7 +95,7 @@ func (gr *GameRunner) setupStratosphereComePass() *table.Table {
 	return table.NewCraplessTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
+			player.NewPlayer(strategy.NewComePassMaxOddsStrategy(15), 0),
 		},
 		odds.Get100xMaxOdds(),
 	)
@@ -105,7 +105,7 @@ func (gr *GameRunner) setupHorseshoeDigitalComePass() *table.Table {
 	return table.NewRegularTable(
 		dice.NewSeededDice(),
 		[]*player.Gambler{
-			player.NewPlayer(strategy.NewComePassStrategy(15), 0),
+			player.NewPlayer(strategy.NewComePassMaxOddsStrategy(15), 0),
 		},
 		odds.Get2xMaxOdds(),
 	)

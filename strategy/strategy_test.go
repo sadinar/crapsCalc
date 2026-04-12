@@ -12,7 +12,7 @@ func TestGetPassLineAmount(t *testing.T) {
 	be := NewBuyExtremesStrategy(5, false, false)
 	be2 := NewBuyExtremesStrategy(5, true, false)
 	be3 := NewBuyExtremesStrategy(5, true, true)
-	cp := NewComePassStrategy(5)
+	cp := NewComePassMaxOddsStrategy(5)
 
 	assert.Empty(t, ba.GetPassLineAmount())
 	assert.Empty(t, be.GetPassLineAmount())
@@ -26,7 +26,7 @@ func TestGetOddsAmount(t *testing.T) {
 	be := NewBuyExtremesStrategy(5, false, false)
 	be2 := NewBuyExtremesStrategy(5, true, false)
 	be3 := NewBuyExtremesStrategy(5, true, true)
-	cp := NewComePassStrategy(5)
+	cp := NewComePassMaxOddsStrategy(5)
 
 	stdMaxOdds := odds.GetStdMaxOdds()
 	assert.Empty(t, ba.GetOddsAmount(2, stdMaxOdds[2]))
@@ -41,7 +41,7 @@ func TestGetBuyAmount(t *testing.T) {
 	be := NewBuyExtremesStrategy(5, false, false)
 	be2 := NewBuyExtremesStrategy(5, true, false)
 	be3 := NewBuyExtremesStrategy(5, true, true)
-	cp := NewComePassStrategy(5)
+	cp := NewComePassMaxOddsStrategy(5)
 
 	assert.Equal(t, 5, ba.GetBuyAmount(2))
 	assert.Equal(t, 5, ba.GetBuyAmount(3))
@@ -117,6 +117,6 @@ func TestNoPass(t *testing.T) {
 	be := BuyExtremes{betAmount: 8765}
 	assert.Empty(t, be.GetDontPassAmount())
 
-	cp := ComePassStrategy{passLineAmount: 8567}
+	cp := ComePassMaxOddsStrategy{passLineAmount: 8567}
 	assert.Empty(t, cp.GetDontPassAmount())
 }
