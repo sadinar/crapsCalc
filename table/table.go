@@ -14,6 +14,7 @@ type Table struct {
 	gamblers          []*player.Gambler
 	house             house.House
 	roundCounter      int
+	rollCounter       int
 	sevenOutLastRound bool
 	maxOdds           map[int]int
 }
@@ -43,6 +44,7 @@ func NewCraplessTable(dice dice.RollGenerator, gamblers []*player.Gambler, maxOd
 }
 
 func (t *Table) Shoot() {
+	t.rollCounter++
 	t.sevenOutLastRound = false
 	roll := t.dice.Roll()
 
@@ -62,6 +64,10 @@ func (t *Table) Shoot() {
 		person.OfferBuyBets(t.ruleset.GetAllowedBuyPoints())
 	}
 	t.handlePointOnRoll(roll)
+}
+
+func (t *Table) GetRollCount() int {
+	return t.rollCounter
 }
 
 func (t *Table) GetRoundCount() int {

@@ -9,13 +9,65 @@ import (
 )
 
 func main() {
-	numRuns := 1000000
+	numRuns := 1000
 	workerCount := 20
-	results := make([]int, numRuns)
+	results := make([][]int, numRuns)
 
 	mgr := runtime.NewManager(numRuns, workerCount, runtime.RegularComePass)
 	mgr.SimulateGames(results)
-	printStats(results)
+
+	justBanks := make([]int, 0)
+	topGames := make([][]int, 0)
+	for _, result := range results {
+		justBanks = append(justBanks, result[0])
+
+		if len(topGames) < 10 {
+			topGames = append(topGames, result)
+			topGames = sortTopGames(topGames)
+			continue
+		}
+
+		if result[0] > topGames[9][0] {
+			topGames[9] = result
+			topGames = sortTopGames(topGames)
+		}
+	}
+
+	printBestGames(topGames)
+	fmt.Println()
+	printStats(justBanks)
+}
+
+func printBestGames(bestGames [][]int) {
+	fmt.Printf("Top %d highest winning games:\n", len(bestGames))
+	for _, game := range bestGames {
+		fmt.Printf("Change in bank: %d    Rolls at the table: %d\n", game[0], game[1])
+	}
+}
+
+func sortTopGames(allGames [][]int) [][]int {
+	orderedGames := make([][]int, len(allGames))
+	remainingGames := allGames
+
+	for i := 0; i < len(allGames); i++ {
+		bestIndex := 0
+		for x := 0; x < len(remainingGames); x++ {
+			if remainingGames[x][0] > remainingGames[bestIndex][0] {
+				bestIndex = x
+			}
+		}
+		orderedGames[i] = remainingGames[bestIndex]
+
+		newRemainingGames := make([][]int, 0)
+		for x := 0; x < len(remainingGames); x++ {
+			if x != bestIndex {
+				newRemainingGames = append(newRemainingGames, remainingGames[x])
+			}
+		}
+		remainingGames = newRemainingGames
+	}
+
+	return orderedGames
 }
 
 func printStats(results []int) {

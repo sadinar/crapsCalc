@@ -12,7 +12,7 @@ type Manager struct {
 	numberOfRuns       int
 	workerCount        int
 	taskChannel        chan int
-	resultChannel      chan int
+	resultChannel      chan []int
 	workerWg           *sync.WaitGroup
 	collectionWg       *sync.WaitGroup
 }
@@ -23,13 +23,13 @@ func NewManager(numberOfRuns int, workerCount int, tableConfiguration string) *M
 		numberOfRuns:       numberOfRuns,
 		workerCount:        workerCount,
 		taskChannel:        make(chan int, workerCount),
-		resultChannel:      make(chan int, workerCount),
+		resultChannel:      make(chan []int, workerCount),
 		workerWg:           &sync.WaitGroup{},
 		collectionWg:       &sync.WaitGroup{},
 	}
 }
 
-func (rm *Manager) SimulateGames(results []int) []int {
+func (rm *Manager) SimulateGames(results [][]int) [][]int {
 	go rm.fillTaskChannel()
 	rm.runWorkers()
 	return rm.waitForResult(results)
@@ -64,7 +64,7 @@ func (rm *Manager) runWorkers() {
 	}
 }
 
-func (rm *Manager) waitForResult(results []int) []int {
+func (rm *Manager) waitForResult(results [][]int) [][]int {
 	rm.collectionWg.Add(1)
 
 	go rm.collectResults(results)
@@ -76,7 +76,7 @@ func (rm *Manager) waitForResult(results []int) []int {
 	return results
 }
 
-func (rm *Manager) collectResults(results []int) {
+func (rm *Manager) collectResults(results [][]int) {
 	defer rm.collectionWg.Done()
 	index := 0
 	for result := range rm.resultChannel {

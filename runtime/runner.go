@@ -23,7 +23,7 @@ const DoNotPassDoNotCome = "DoNotPassDoNotCome"
 type GameRunner struct {
 	wg            *sync.WaitGroup
 	inputChannel  chan int
-	outputChannel chan int
+	outputChannel chan []int
 }
 
 func (gr *GameRunner) Start(tableConfiguration string) {
@@ -34,7 +34,7 @@ func (gr *GameRunner) Start(tableConfiguration string) {
 	}
 }
 
-func (gr *GameRunner) playAtTable(tableType string, resultChannel chan int) {
+func (gr *GameRunner) playAtTable(tableType string, resultChannel chan []int) {
 	var tbl *table.Table
 	switch tableType {
 	case RegularComePass:
@@ -68,7 +68,7 @@ func (gr *GameRunner) playAtTable(tableType string, resultChannel chan int) {
 		tbl.Shoot()
 	}
 
-	resultChannel <- tbl.GetPlayerBanks()[0]
+	resultChannel <- []int{tbl.GetPlayerBanks()[0], tbl.GetRollCount()}
 }
 
 func (gr *GameRunner) setupRegularComePass() *table.Table {
